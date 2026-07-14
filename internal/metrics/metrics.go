@@ -34,7 +34,7 @@ var (
 	DetectionLatency = promauto.NewHistogram(prometheus.HistogramOpts{
 		Name:    "wazuh_adapter_detection_latency_seconds",
 		Help:    "Latency from HTTP receive to Wazuh alert detection (end-to-end).",
-		Buckets: append(prometheus.DefBuckets, 5, 10, 30, 60),
+		Buckets: []float64{.005, .01, .025, .05, .1, .25, .5, 1, 2.5, 5, 10, 30, 60},
 	})
 
 	PayloadSizeBytes = promauto.NewHistogram(prometheus.HistogramOpts{
