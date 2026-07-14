@@ -1,0 +1,23 @@
+# Binary
+adapter
+
+# Go build cache
+*.test
+*.out
+
+# Environment
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Baseline output artifacts
+scripts/baseline_results/
