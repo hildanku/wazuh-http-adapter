@@ -1,5 +1,5 @@
-# Binary
-adapter
+# Binary (compiled output only, not cmd/adapter/ directory)
+/adapter
 
 # Go build cache
 *.test
