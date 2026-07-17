@@ -38,7 +38,7 @@ func loadConfig() config {
 		timeoutSec = 5
 	}
 
-	tailerPollMs, err := strconv.Atoi(getEnv("TAILER_POLL_MS", "500"))
+	tailerPollMs, err := strconv.Atoi(getEnv("TAILER_POLL_MS", "100"))
 	if err != nil {
 		tailerPollMs = 500
 	}

@@ -85,8 +85,19 @@ func (h *EventHandler) HandleIngest(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// HandleHealth is a liveness probe endpoint.
+// HandleHealth is a readiness probe — checks TCP forwarder can reach Wazuh.
+// Returns 200 + {"status":"ok","wazuh":"reachable"} if healthy.
+// Returns 503 + {"status":"degraded","wazuh":"unreachable"} if Wazuh down.
+// Used by runner wait_for_adapter() to gate k6 start.
 func (h *EventHandler) HandleHealth(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status":"ok"}`))
+	w.Header().Set("Content-Type", "application/json")
+	if h.fwd.Healthy() {
+		metrics.PoolHealthy.Set(1)
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok","wazuh":"reachable"}`))
+	} else {
+		metrics.PoolHealthy.Set(0)
+		w.WriteHeader(http.StatusServiceUnavailable)
+		w.Write([]byte(`{"status":"degraded","wazuh":"unreachable"}`))
+	}
 }

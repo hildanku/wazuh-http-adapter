@@ -54,4 +54,12 @@ var (
 		Name: "wazuh_adapter_alerts_total",
 		Help: "Total alerts observed in alerts.json, labeled by rule_id and description.",
 	}, []string{"rule_id", "description"})
+
+	// PoolHealthy reflects whether TCP forwarder can reach Wazuh.
+	// 1 = healthy (probe succeeded), 0 = unhealthy (probe failed).
+	// Used by /health readiness check — runner waits until this is 1.
+	PoolHealthy = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "wazuh_adapter_pool_healthy",
+		Help: "1 if TCP forwarder can reach Wazuh syslog port, 0 otherwise.",
+	})
 )

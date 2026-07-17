@@ -70,6 +70,18 @@ func (f *TCPForwarder) release(conn net.Conn) {
 	}
 }
 
+// Healthy probes Wazuh reachability by attempting a fresh TCP dial.
+// Returns true if dial succeeds within timeout; does NOT consume pool connections.
+// Called by /health endpoint — distinguishes process-alive from Wazuh-reachable.
+func (f *TCPForwarder) Healthy() bool {
+	conn, err := f.dial()
+	if err != nil {
+		return false
+	}
+	conn.Close()
+	return true
+}
+
 // Send formats payload as RFC 3164 syslog message and writes to Wazuh via TCP.
 // correlationID is embedded in the message body so alerts.json tail can match it.
 // Returns duration of the TCP write (used as ingest latency component).
